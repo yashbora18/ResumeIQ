@@ -1,0 +1,135 @@
+.rq-button {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+
+  font-family: var(--font-body);
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.rq-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.rq-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.rq-button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.rq-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Sizes */
+
+.rq-button--small {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  font-size: 0.78rem;
+}
+
+.rq-button--medium {
+  min-height: 42px;
+  padding: 0 var(--space-4);
+  font-size: 0.86rem;
+}
+
+.rq-button--large {
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  font-size: 0.92rem;
+}
+
+/* Primary */
+
+.rq-button--primary {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  box-shadow: var(--shadow-sm);
+}
+
+.rq-button--primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Secondary */
+
+.rq-button--secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.rq-button--secondary:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Ghost */
+
+.rq-button--ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.rq-button--ghost:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+/* Danger */
+
+.rq-button--danger {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+.rq-button--danger:hover:not(:disabled) {
+  filter: brightness(0.94);
+  box-shadow: var(--shadow-sm);
+}
+
+.rq-button--full {
+  width: 100%;
+}
+
+.rq-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rq-button__spinner {
+  animation: rq-button-spin 0.8s linear infinite;
+}
+
+@keyframes rq-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
