@@ -582,27 +582,19 @@ async function handleDownload(resume) {
 
 
 
-  const completedCount = resumes.filter(
-
-    (resume) =>
-
-      resume.processing_status === "completed"
-
-  ).length;
+const completedCount = resumes.filter(
+  (resume) =>
+    resume.processing_status === "parsed" ||
+    resume.processing_status === "completed"
+).length;
 
 
 
-  const processingCount = resumes.filter(
-
-    (resume) =>
-
-      resume.processing_status === "uploaded" ||
-
-      resume.processing_status === "processing" ||
-
-      resume.processing_status === "parsed"
-
-  ).length;
+const processingCount = resumes.filter(
+  (resume) =>
+    resume.processing_status === "uploaded" ||
+    resume.processing_status === "processing"
+).length;
 
 
 
@@ -684,7 +676,7 @@ async function handleDownload(resume) {
 
       completed: "Completed",
 
-      parsed: "Parsed",
+      parsed: "Completed",
 
       uploaded: "Uploaded",
 
@@ -718,21 +710,19 @@ async function handleDownload(resume) {
 
 
 
-    if (normalized === "completed") {
-
-      return "resume-status resume-status--success";
-
-    }
+    if (
+  normalized === "completed" ||
+  normalized === "parsed"
+) {
+  return "resume-status resume-status--success";
+}
 
 
 
     if (
 
       normalized === "uploaded" ||
-
-      normalized === "processing" ||
-
-      normalized === "parsed"
+      normalized === "processing"
 
     ) {
 
