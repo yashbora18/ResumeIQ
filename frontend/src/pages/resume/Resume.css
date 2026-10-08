@@ -1840,6 +1840,10 @@ html.dark {
    ========================================================= */
 
 @media (max-width: 850px) {
+  .resume-page {
+    padding: 22px 18px 32px;
+  }
+
   .resume-page__header {
     align-items: flex-start;
     flex-direction: column;
@@ -1857,13 +1861,40 @@ html.dark {
     padding: 14px;
   }
 
+  /* Keep the table inside the available width.
+     Do not force a desktop-sized min-width. */
   .resume-table {
-    overflow-x: auto;
+    width: 100%;
+    overflow: visible;
   }
 
   .resume-table__head,
   .resume-row {
-    min-width: 760px;
+    min-width: 0;
+  }
+
+  .resume-table__head,
+  .resume-row {
+    grid-template-columns:
+      minmax(180px, 2fr)
+      0.65fr
+      0.85fr
+      0.85fr
+      0.7fr
+      68px;
+  }
+
+  .resume-table__head {
+    padding: 0 13px;
+  }
+
+  .resume-row {
+    padding: 0 13px;
+  }
+
+  .resume-row__date,
+  .resume-row__size {
+    font-size: 9px;
   }
 }
 
@@ -1873,11 +1904,11 @@ html.dark {
 
 @media (max-width: 640px) {
   .resume-page {
-    padding: 20px 14px 30px;
+    padding: 18px 12px 28px;
   }
 
   .resume-page__header {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 
   .resume-page__header h1 {
@@ -1886,24 +1917,33 @@ html.dark {
 
   .resume-page__header p {
     font-size: 12px;
+    line-height: 1.55;
   }
+
+  .resume-upload-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Summary cards */
 
   .resume-summary {
     grid-template-columns: 1fr;
-
     gap: 9px;
-
     margin-bottom: 15px;
   }
 
   .resume-summary-card {
     min-height: 62px;
+    padding: 14px;
   }
+
+  /* Toolbar */
 
   .resume-toolbar {
     align-items: stretch;
-
     flex-direction: column;
+    gap: 9px;
   }
 
   .resume-search {
@@ -1914,30 +1954,197 @@ html.dark {
     width: 100%;
   }
 
+  /* Resume list */
+
   .resume-list {
+    width: 100%;
     border-radius: 12px;
+    overflow: hidden;
   }
 
   .resume-list__header {
     min-height: 57px;
-
     padding: 0 14px;
+  }
+
+  /* Hide desktop table headings on mobile */
+
+  .resume-table__head {
+    display: none;
+  }
+
+  /*
+   * Each resume becomes a responsive card.
+   *
+   * Row 1:
+   *   Resume name + Actions
+   *
+   * Row 2:
+   *   File type + Status
+   *
+   * Row 3:
+   *   Uploaded date + File size
+   */
+
+  .resume-row {
+    display: grid;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+
+    grid-template-rows:
+      auto
+      auto
+      auto;
+
+    column-gap: 12px;
+    row-gap: 10px;
+
+    padding: 15px;
+
+    border-bottom: 1px solid var(--resume-border);
+  }
+
+  .resume-row:last-child {
+    border-bottom: 0;
+  }
+
+  /* Resume name */
+
+  .resume-row__name {
+    grid-column: 1;
+    grid-row: 1;
+
+    min-width: 0;
+
+    align-items: center;
+    gap: 10px;
+  }
+
+  .resume-file-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+
+  .resume-row__name strong {
+    max-width: 100%;
+
+    font-size: 12px;
+  }
+
+  .resume-row__name span {
+    font-size: 10px;
+  }
+
+  /* Actions */
+
+  .resume-row__actions {
+    grid-column: 2;
+    grid-row: 1;
+
+    align-self: start;
+
+    justify-content: flex-end;
+  }
+
+  .resume-row__actions > button {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+  }
+
+  /* File type */
+
+  .resume-file-type {
+    grid-column: 1;
+    grid-row: 2;
+
+    align-self: center;
+
+    padding: 4px 7px;
+  }
+
+  /* Status */
+
+  .resume-status {
+    grid-column: 2;
+    grid-row: 2;
+
+    justify-self: end;
+    align-self: center;
+
+    white-space: nowrap;
+  }
+
+  /* Uploaded date */
+
+  .resume-row__date {
+    grid-column: 1;
+    grid-row: 3;
+
+    align-self: center;
+
+    font-size: 10px;
+  }
+
+  .resume-row__date::before {
+    content: "Uploaded: ";
+
+    color: var(--resume-muted-light);
+    font-weight: 700;
+  }
+
+  /* File size */
+
+  .resume-row__size {
+    grid-column: 2;
+    grid-row: 3;
+
+    justify-self: end;
+    align-self: center;
+
+    font-size: 10px;
+  }
+
+  .resume-row__size::before {
+    content: "Size: ";
+
+    color: var(--resume-muted-light);
+    font-weight: 700;
+  }
+
+  /* Dropdown */
+
+  .resume-row__menu {
+    top: calc(100% + 6px);
+    right: 0;
+
+    width: 165px;
+    min-width: 165px;
+  }
+
+  .resume-row:last-child .resume-row__menu {
+    top: auto;
+    bottom: calc(100% + 6px);
   }
 
   /* Modal */
 
   .resume-modal-backdrop {
     align-items: flex-start;
-
     padding: 12px;
   }
 
   .resume-upload-modal,
   .resume-delete-modal {
     width: 100%;
-
     margin: auto 0;
-
     border-radius: 15px;
   }
 
@@ -1951,17 +2158,13 @@ html.dark {
 
   .resume-upload-modal__description {
     margin: 7px 17px 15px;
-
     font-size: 11px;
   }
 
   .resume-dropzone {
     width: calc(100% - 34px);
-
     min-height: 200px;
-
     margin: 0 17px;
-
     padding: 22px 15px;
   }
 
@@ -1975,7 +2178,6 @@ html.dark {
 
   .resume-upload-modal__footer {
     flex-direction: column-reverse;
-
     padding: 16px 17px 18px;
   }
 
@@ -1995,6 +2197,8 @@ html.dark {
   .resume-delete-modal__actions button {
     width: 100%;
   }
+
+  /* Toast */
 
   .resume-toast {
     right: 16px;
