@@ -1700,7 +1700,79 @@ def get_my_resumes(
 
 
 
+# ============================================================
+# 3.5 Download Resume
+# ============================================================
 
+@router.get(
+    "/{resume_id}/download",
+)
+def download_resume(
+    resume_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Download a resume file owned by the authenticated user."""
+
+    resume = (
+        db.query(Resume)
+        .filter(
+            Resume.id == resume_id,
+            Resume.user_id == current_user.id,
+        )
+        .first()
+    )
+
+    if resume is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resume not found.",
+        )
+
+    stored_path = Path(resume.file_path)
+
+    if not stored_path.is_absolute():
+        stored_path = Path.cwd() / stored_path
+
+    try:
+        resolved_path = stored_path.resolve()
+        upload_root = UPLOAD_DIR.resolve()
+
+        resolved_path.relative_to(upload_root)
+
+    except (OSError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resume file not found.",
+        )
+
+    if not resolved_path.is_file():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resume file not found.",
+        )
+
+    filename = Path(
+        resume.original_filename or resolved_path.name
+    ).name
+
+    media_types = {
+        ".pdf": "application/pdf",
+        ".docx": (
+            "application/"
+            "vnd.openxmlformats-officedocument."
+            "wordprocessingml.document"
+        ),
+    }
+
+    return FileResponse(
+        path=str(resolved_path),
+        media_type=media_types.get(
+            resolved_path.suffix.lower(),
+            "application/octet-stream",
+        ),
+        filename=filename,
+    )
 
 
 

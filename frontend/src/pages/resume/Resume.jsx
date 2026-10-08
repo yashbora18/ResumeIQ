@@ -449,71 +449,52 @@ function Resume() {
 
 
 
-  async function handleDownload(resume) {
+async function handleDownload(resume) {
+  try {
+    setMenuId(null);
 
-    try {
+    const blob = await downloadResume(resume.id);
 
-      setMenuId(null);
-
-
-
-      const blob = await downloadResume(resume.id);
-
-
-
-      const url = URL.createObjectURL(blob);
-
-      const anchor = document.createElement("a");
-
-
-
-      anchor.href = url;
-
-      anchor.download =
-
-        resume.original_filename ||
-
-        "resume";
-
-
-
-      document.body.appendChild(anchor);
-
-      anchor.click();
-
-      anchor.remove();
-
-
-
-      URL.revokeObjectURL(url);
-
-
-
-      showToast(
-
-        "success",
-
-        "Resume download started."
-
+    if (!blob || blob.size === 0) {
+      throw new Error(
+        "The resume file is empty or unavailable."
       );
-
-    } catch (err) {
-
-      showToast(
-
-        "error",
-
-        err instanceof Error
-
-          ? err.message
-
-          : "Unable to download the resume."
-
-      );
-
     }
 
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download =
+      resume.original_filename ||
+      "resume";
+
+    anchor.style.display = "none";
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
+
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+
+    showToast(
+      "success",
+      "Resume download started."
+    );
+  } catch (err) {
+    showToast(
+      "error",
+      err instanceof Error
+        ? err.message
+        : "Unable to download the resume."
+    );
   }
+}
 
 
 
